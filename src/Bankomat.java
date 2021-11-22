@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Bankomat {
 
@@ -10,7 +7,6 @@ public class Bankomat {
         int moneyCount = 900;
         //HashMap<String, Integer> cardHashMap = new HashMap();
         ArrayList<Card> lista = new ArrayList<>();
-
         Map<String, String>  cardHashMap = new HashMap<String, String>();
         Card mUserCard;
 
@@ -28,22 +24,6 @@ public class Bankomat {
         }
 
         void getMoney() {
-//        System.out.println("How much money do you want to get?");
-//        Scanner sc = new Scanner(System.in);
-//        int line = 0;
-//        if (sc.hasNextInt()) {
-//            line = sc.nextInt();
-//            if (line > moneyCount) {
-//                System.out.println("Sorry! It is very cheap ATM. We dont have enough money.");
-//                line = 0;
-//                System.out.println("Current balance: " + moneyCount + "\n" + "Removed money: " + line);
-//            } else {
-//                moneyCount = moneyCount - line;
-//                System.out.println("Current balance: " + moneyCount + "\n" + "Removed money: " + line);
-//            }
-//        } else {
-//            System.out.println("Enter a number for getting money");
-//        }
             mUserCard.getMoney();
             showMainMenu();
         }
@@ -58,7 +38,11 @@ public class Bankomat {
         }
 
         void showBalance() {
-            mUserCard.checkBalance();
+            for (int i =0; i<lista.size(); i++) {
+                if (cardHashMap.containsKey(lista.get(i).logIn)) {
+                    lista.get(i).checkBalance();
+                }
+            }
             showMainMenu();
         }
 
@@ -114,7 +98,7 @@ public class Bankomat {
                         showBalance();
                         break;
                     case "4":
-                        showCardInfo(lista.get(0));
+                        lookingForACard();
                         break;
                     case "5":
                         toglePower();
@@ -159,21 +143,34 @@ public class Bankomat {
         System.out.println("Enter your four-digit pin number:");
         String pin = scanner.nextLine();
         cardHashMap.put(logIn,pin);
-        String nazwa = logIn;
-        Card card1 = new Card(logIn,1232112,name + " " + lastName, 123,"Visa?", 2025,500,100);
+        Random numer = new Random();
+        int cardNumber = numer.nextInt(9000000)+999999;
+        int cvcCode = numer.nextInt(900)+99;
+        Card card1 = new Card(logIn,cardNumber,name + " " + lastName, cvcCode,"VISA", 2025,500,100);
         lista.add(card1);
-        System.out.println(cardHashMap.get(logIn));
-        System.out.println(lista.get(0).logIn);
-        if (cardHashMap.get(logIn).equals(lista.get(0).logIn)) {
-            System.out.println("Udało się");
-        }
         startProgramm();
     }
 
-    void szukanieKartyPoLoginie(){
+    void lookingForACard(){
 
-        System.out.println(cardHashMap.get(0));
-        System.out.println(lista.get(0));
+            for (int i =0; i<lista.size(); i++){
+                if (cardHashMap.containsKey(lista.get(i).logIn)) {
+                    showCardInfo(lista.get(i));
+                }else{
+                    System.out.println("Karta nie istnieje");
+                }
+            }
+    }
+
+    void lookingCardBalance(){
+
+        for (int i =0; i<lista.size(); i++){
+            if (cardHashMap.containsKey(lista.get(i).logIn)) {
+                showCardInfo(lista.get(i));
+            }else{
+                System.out.println("Karta nie istnieje");
+            }
+        }
     }
 
 
