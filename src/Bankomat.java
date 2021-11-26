@@ -4,27 +4,25 @@ import java.util.*;
 public class Bankomat {
 
         boolean isPoweredOn = false;
-        int moneyCount = 900;
-        //HashMap<String, Integer> cardHashMap = new HashMap();
         ArrayList<Card> lista = new ArrayList<>();
         Map<String, String>  cardHashMap = new HashMap<String, String>();
-        Card mUserCard;
 
         void pushMoney() {
-            mUserCard.pushMoney();
+            for (int i =0; i<lista.size(); i++) {
+                if (cardHashMap.containsKey(lista.get(i).logIn)) {
+                    lista.get(i).pushMoney();
+                }
+            }
             showMainMenu();
         }
 
-        void getAllCards() {
-
-        }
-
-        void setCurrentCard() {
-
-        }
 
         void getMoney() {
-            mUserCard.getMoney();
+            for (int i =0; i<lista.size(); i++) {
+                if (cardHashMap.containsKey(lista.get(i).logIn)) {
+                    lista.get(i).getMoney();
+                }
+            }
             showMainMenu();
         }
 
@@ -56,7 +54,7 @@ public class Bankomat {
 
             try{
                 if (cardHashMap.get(login).equals(password)) {
-                    System.out.println("Udało się");
+                    System.out.println("Successful login.");
                     return true;
                 } else {
                     System.out.println("Wrong password or login");
@@ -140,7 +138,7 @@ public class Bankomat {
         String lastName = scanner.nextLine();
         System.out.println("Enter your log in:");
         String logIn = scanner.nextLine();
-        System.out.println("Enter your four-digit pin number:");
+        System.out.println("Enter your pin number:");
         String pin = scanner.nextLine();
         cardHashMap.put(logIn,pin);
         Random numer = new Random();
@@ -148,6 +146,7 @@ public class Bankomat {
         int cvcCode = numer.nextInt(900)+99;
         Card card1 = new Card(logIn,cardNumber,name + " " + lastName, cvcCode,"VISA", 2025,500,100);
         lista.add(card1);
+        System.out.println("Congratulations! For setting up an account, you get 500 euros to start.");
         startProgramm();
     }
 
@@ -157,22 +156,9 @@ public class Bankomat {
                 if (cardHashMap.containsKey(lista.get(i).logIn)) {
                     showCardInfo(lista.get(i));
                 }else{
-                    System.out.println("Karta nie istnieje");
+                    System.out.println("The card does not exist.");
                 }
             }
     }
-
-    void lookingCardBalance(){
-
-        for (int i =0; i<lista.size(); i++){
-            if (cardHashMap.containsKey(lista.get(i).logIn)) {
-                showCardInfo(lista.get(i));
-            }else{
-                System.out.println("Karta nie istnieje");
-            }
-        }
-    }
-
-
 }
 
